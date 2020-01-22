@@ -5,26 +5,51 @@ public class BackgroundController : MonoBehaviour
 {
     public GameObject BackgroundBlock;
 
-    public Transform Player;
+    public GameObject Player;
 
     private readonly List<GameObject> backgroundBlocks = new List<GameObject>();
+
+    private float disappearRange = 10;
+
+    private Vector3 previousPosition;
+
+    private float minimumY;
 
     // Start is called before the first frame update
     void Start()
     {
-        var previousPosition = Player.position;
-        for (int i = 0; i < 20; ++i)
+        previousPosition = BackgroundBlock.transform.position;
+        minimumY = Player.transform.position.y;
+
+        for (int i = 0; i < 10; ++i)
         {
-            var position = new Vector3(previousPosition.x + Random.Range(3, 6), previousPosition.y + Random.Range(-2, 2), previousPosition.z);
-            var block = GameObject.Instantiate(BackgroundBlock, position, Quaternion.identity);
+            var block = GameObject.Instantiate(BackgroundBlock, GetNewPosition(), Quaternion.identity);
             backgroundBlocks.Add(block);
-            previousPosition = position;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        foreach (var block in backgroundBlocks)
+        {
+            if (Player.transform.position.x - block.transform.position.x > disappearRange)
+            {
+                block.transform.position = GetNewPosition();
+            }
+        }
+    }
 
+    private Vector3 GetNewPosition()
+    {
+        var position = new Vector3(previousPosition.x + Random.Range(4.5f, 5.7f), previousPosition.y + Random.Range(-1.6f, 1.6f), previousPosition.z);
+        previousPosition = position;
+        if (position.y < minimumY)
+        {
+            minimumY = position.y;
+            Player.GetComponent<PlayerController>().DeathHeight = minimumY - 5;
+        }
+            
+        return position;
     }
 }
