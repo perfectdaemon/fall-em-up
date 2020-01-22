@@ -3,9 +3,9 @@
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
-    public const float ConstantMoveVelocity = 3;
+    public float ConstantMoveVelocity;
 
-    public const float JumpVelocity = 5;
+    public float JumpVelocity;
 
     public Transform GroundChecker;
 
