@@ -13,6 +13,10 @@ public class PlayerController : MonoBehaviour
 
     public float GroundRadius;
 
+    public float PickupRadius;
+
+    public LayerMask PickupLayer;
+
     public float DeathHeight;
 
     public LayerMask GroundLayer;
@@ -30,6 +34,8 @@ public class PlayerController : MonoBehaviour
     private bool isOnGround;
 
     private bool isAlive;
+
+    private Collider2D pickup;
 
     void Start()
     {
@@ -62,6 +68,15 @@ public class PlayerController : MonoBehaviour
             rb.velocity += new Vector2(0, JumpVelocity);
 
         AddScore();
+
+        pickup = Physics2D.OverlapCircle(transform.position, PickupRadius, PickupLayer);
+
+        if (pickup)
+        {
+            Score += 5;
+            ScoreText.GetComponent<Text>().text = Score.ToString();
+            GameObject.Destroy(pickup.gameObject);
+        }
     }
 
     IEnumerator AddScore()
