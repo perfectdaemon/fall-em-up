@@ -42,7 +42,7 @@ public class BackgroundController : MonoBehaviour
 
     private Vector3 GetNewPosition()
     {
-        var position = new Vector3(previousPosition.x + Random.Range(4.5f, 5.7f), previousPosition.y + Random.Range(-1.6f, 1.6f), previousPosition.z);
+        var position = new Vector3(previousPosition.x + Random.Range(5.5f, 7.7f), previousPosition.y + Random.Range(-2.0f, 2.0f), previousPosition.z);
         previousPosition = position;
         if (position.y < minimumY)
         {

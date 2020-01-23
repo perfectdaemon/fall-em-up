@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
@@ -17,6 +19,12 @@ public class PlayerController : MonoBehaviour
 
     public GameObject EndGameMenu;
 
+    public int Score;
+
+    public GameObject ScoreText;
+
+    public GameObject FinalScoreText;
+
     private Rigidbody2D rb;
 
     private bool isOnGround;
@@ -28,7 +36,8 @@ public class PlayerController : MonoBehaviour
         EndGameMenu.SetActive(false);
         rb = GetComponent<Rigidbody2D>();
         isAlive = true;
-        rb.simulated = true;        
+        rb.simulated = true;
+        StartCoroutine(AddScore());
     }
 
     // Update is called once per frame
@@ -39,6 +48,7 @@ public class PlayerController : MonoBehaviour
             isAlive = false;
             rb.simulated = false;
             EndGameMenu.SetActive(true);
+            FinalScoreText.GetComponent<Text>().text = Score.ToString();
         }
 
         if (!isAlive)
@@ -50,5 +60,17 @@ public class PlayerController : MonoBehaviour
 
         if (isOnGround && Input.GetMouseButtonDown(0))
             rb.velocity += new Vector2(0, JumpVelocity);
+
+        AddScore();
+    }
+
+    IEnumerator AddScore()
+    {
+        while (isAlive)
+        {
+            Score += 1;
+            ScoreText.GetComponent<Text>().text = Score.ToString();
+            yield return new WaitForSeconds(1f);
+        }
     }
 }
